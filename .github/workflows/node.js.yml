@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x]
+        node-version: [12.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/ , 14.x, 15.x
 
     steps:
@@ -25,16 +25,33 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    #- run: npm ci
-   # - run: npm run build --if-present
-   # - run: npm test
-    - run: npm install
+    - name: print the contents in workspace
+      run: ls -ltr
+      
+    - name: zipping the contents
+      run: tar czf nanogram.tar.gz node_modules package.json
+    
     - name: Upload result 
       uses: actions/upload-artifact@v2
       with:
-        name: node_modules
-        path: node_modules
-    - name: Download math result for job 1
+        name: nanogram.tar.gz
+        path: nanogram.tar.gz
+    
+    - name: Download result
       uses: actions/download-artifact@v2
       with:
-          name: node_modules
+          name: nanogram.tar.gz
+          
+    #- run: npm ci
+   # - run: npm run build --if-present
+   # - run: npm test
+#     - run: npm install
+#     - name: Upload result 
+#       uses: actions/upload-artifact@v2
+#       with:
+#         name: node_modules
+#         path: node_modules
+#     - name: Download math result for job 1
+#       uses: actions/download-artifact@v2
+#       with:
+#           name: node_modules
